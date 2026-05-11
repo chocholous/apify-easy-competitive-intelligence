@@ -14,16 +14,10 @@ call-actor: apify/google-search-scraper
   input: { "queries": "site:[competitor.com]\nsite:[competitor-2.com]" }
 
 # 3: Traffic data (may be empty for small sites)
-call-actor: pro100chok/similarweb-scraper
-  input: { "searchType": "similarweb", "domains": ["competitor.com", "competitor-2.com"] }
+call-actor: pro100chok/similarweb-scraper  # minimum 10 domains — batch all competitors in one call
 
 # 4: Blog/content strategy
-call-actor: apify/website-content-crawler
-  input: {
-    "startUrls": [{"url": "[competitor-url]/blog"}],
-    "maxCrawlPages": 10,
-    "proxyConfiguration": {"useApifyProxy": true}
-  }
+call-actor: apify/website-content-crawler  # [competitor-url]/blog, crawl 10 pages
 ```
 
 The most valuable SEO finding is often **absence** — not ranking for category keywords is a critical gap.

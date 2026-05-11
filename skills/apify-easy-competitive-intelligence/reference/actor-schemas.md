@@ -55,13 +55,13 @@ Each `organicResult`: `title`, `url`, `description`, `position`, `date`, `emphas
 
 ## dev_fusion/Linkedin-Company-Scraper
 
+⚠️ **Before calling:** LinkedIn slugs often differ from company names (e.g., Oxylabs → `oxylabs-io`, not `oxylabs`). Wrong slug silently returns 0 results. **Discover via SERP first:** `"[company] site:linkedin.com/company"`
+
 **Input:**
 ```json
-{ "profileUrls": ["https://www.linkedin.com/company/company-name/"] }
+{ "profileUrls": ["https://www.linkedin.com/company/VERIFIED-SLUG/"] }
 ```
 ⚠️ Field is `profileUrls`, NOT `urls`.
-
-**How to find the URL:** Search LinkedIn for the company → company page URL has format `linkedin.com/company/slug/`. Alternatively, use SERP: `"[company] site:linkedin.com/company"`.
 
 **Output:** Data stored in key-value store, not dataset. Check KV store keys after run.
 
@@ -69,17 +69,17 @@ Each `organicResult`: `title`, `url`, `description`, `position`, `date`, `emphas
 
 ## curious_coder/linkedin-jobs-scraper
 
+⚠️ **Before calling:** Verify the company's exact name on LinkedIn via SERP: `"[company] site:linkedin.com/jobs"`. Multi-word names need URL-encoding (`Bright Data` → `Bright%20Data`). Wrong name returns 0 or unrelated jobs silently.
+
 **Input:**
 ```json
 {
-  "urls": ["https://www.linkedin.com/jobs/search/?keywords=Company&position=1&pageNum=0"],
+  "urls": ["https://www.linkedin.com/jobs/search/?keywords=VERIFIED-COMPANY-NAME&position=1&pageNum=0"],
   "count": 10,
   "scrapeCompany": true
 }
 ```
 ⚠️ `count` minimum is 10. Requires LinkedIn search URL, NOT keyword string.
-
-**How to build the URL:** Replace `Company` in `https://www.linkedin.com/jobs/search/?keywords=Company&position=1&pageNum=0`. URL-encode spaces as `%20` or `+`.
 
 **Output keys:** `id`, `title`, `companyName`, `companyLinkedinUrl`, `companyLogo`, `companyWebsite`, `companyDescription`, `companyEmployeesCount`, `companySlogan`, `location`, `country`, `postedAt`, `postedAtTimestamp`, `expireAt`, `salary`, `salaryInsights`, `seniorityLevel`, `employmentType`, `jobFunction`, `industries`, `descriptionText`, `descriptionHtml`, `applicantsCount`, `applyUrl`, `applyMethod`, `workplaceTypes`, `workRemoteAllowed`, `standardizedTitle`, `link`, `inputUrl`
 
@@ -87,15 +87,15 @@ Each `organicResult`: `title`, `url`, `description`, `position`, `date`, `emphas
 
 ## pratikdani/crunchbase-companies-scraper
 
+⚠️ **Before calling:** Verify the org slug via SERP: `"[company] site:crunchbase.com/organization"`. Slug is typically lowercased with hyphens.
+
 **Input:**
 ```json
-{ "url": "https://www.crunchbase.com/organization/company-name" }
+{ "url": "https://www.crunchbase.com/organization/VERIFIED-SLUG" }
 ```
 ⚠️ Field is `url` (singular string), NOT `urls` (array).
 
-**How to find the URL:** Search Crunchbase or use SERP: `"[company] site:crunchbase.com/organization"`. The slug is typically the company name lowercased with hyphens.
-
-**Output:** May return `{"error": "Issue in running the url."}` for some URLs. When successful: company profile data (funding, investors, financials).
+**Output:** May return `{"error": "Issue in running the url."}` for wrong slugs. When successful: company profile data (funding, investors, financials).
 
 ---
 
@@ -155,12 +155,13 @@ May return 0 items for some products — try the full product URL with title slu
 
 Replaces `zhorex/g2-reviews-scraper` (broken).
 
+⚠️ **Before calling:** Discover the G2 slug via SERP: `"[product] site:g2.com/products"`. Extract slug from URL pattern `g2.com/products/[slug]/reviews`. Wrong slug silently returns reviews for a **different product** (e.g., Slack). Always verify `productName` in output matches your target.
+
 **Input:**
 ```json
-{ "startUrls": [{"url": "https://www.g2.com/products/product-slug/reviews"}], "maxReviews": 10 }
+{ "mode": "product_reviews", "productUrls": ["VERIFIED-SLUG"], "maxReviews": 25, "sortReviews": "newest" }
 ```
-
-**How to find the URL:** Search G2 for the product or use SERP: `"[product] site:g2.com/products"`. The URL pattern is `g2.com/products/[slug]/reviews`. The slug is the product name lowercased with hyphens (e.g., `apify`, `slack`, `databricks`).
+⚠️ Field is `productUrls` (array of slugs), NOT `startUrls`. `mode` is required.
 
 **Output keys:** `reviewId`, `title`, `starRating`, `nps`, `reviewText`, `publishedAt`, `submittedAt`, `reviewerName`, `country`, `region`, `easeOfUse`, `easeOfSetup`, `easeOfAdmin`, `qualityOfSupport`, `meetsRequirements`, `loveTheme`, `hateTheme`, `switchedFromOtherProduct`, `switchedReason`, `companySegment`, `industry`, `productName`, `productSlug`, `url`, `helpfulVotes`, `sourceType`
 
@@ -168,13 +169,13 @@ Replaces `zhorex/g2-reviews-scraper` (broken).
 
 ## zen-studio/capterra-reviews-scraper
 
+⚠️ **Before calling:** Discover the Capterra URL via SERP: `"[product] site:capterra.com/p/"`. URL pattern is `capterra.com/p/[numeric-id]/[Product-Name]/reviews/`. The numeric ID is required — do not guess it.
+
 **Input:**
 ```json
-{ "productUrl": "https://www.capterra.com/p/ID/Product/reviews/", "maxReviews": 10 }
+{ "productUrl": "https://www.capterra.com/p/NUMERIC-ID/Product-Name/reviews/", "maxReviews": 10 }
 ```
 ⚠️ Field is `productUrl` (singular string), NOT `startUrls`.
-
-**How to find the URL:** Search Capterra or use SERP: `"[product] site:capterra.com/p/"`. URL pattern is `capterra.com/p/[numeric-id]/[Product-Name]/reviews/`. The numeric ID is required.
 
 **Output keys:** `url`, `reviewId`, `title`, `writtenOn`, `overallRating`, `easeOfUseRating`, `customerSupportRating`, `functionalityRating`, `valueForMoneyRating`, `recommendationRating`, `prosText`, `consText`, `generalComments`, `adviceToOthers`, `incentivized`, `reviewer`, `vendorResponse`, `scrapedAt`
 
@@ -194,12 +195,13 @@ call-actor: apify/google-search-scraper
 
 ## memo23/glassdoor-scraper-ppr
 
+⚠️ **Before calling:** Discover the Glassdoor URL via SERP: `"[company] site:glassdoor.com/Overview"`. The URL contains an employer ID (`EI_IE[number]`) — the numeric ID is what matters, not the company name part.
+
 **Input:**
 ```json
-{ "startUrls": [{"url": "https://www.glassdoor.com/Overview/Working-at-Company-EI_IEID.htm"}] }
+{ "startUrls": [{"url": "https://www.glassdoor.com/Overview/Working-at-COMPANY-EI_IEVERIFIED-ID.htm"}], "command": "reviews" }
 ```
-
-**How to find the URL:** Search Glassdoor or use SERP: `"[company] site:glassdoor.com/Overview"`. The URL contains an employer ID (`EI_IE[number]`). The company name part can vary — the numeric ID is what matters.
+`command` values: `reviews`, `jobs`, `interviews`, `salaries`, `overview`. Default to `reviews` for CI.
 
 **Output keys:** `reviewId`, `summary`, `pros`, `cons`, `advice`, `ratingOverall`, `ratingWorkLifeBalance`, `ratingCultureAndValues`, `ratingCompensationAndBenefits`, `ratingCareerOpportunities`, `ratingSeniorLeadership`, `ratingDiversityAndInclusion`, `ratingCeo`, `ratingBusinessOutlook`, `ratingRecommendToFriend`, `jobTitle`, `location`, `reviewDateTime`, `isCurrentJob`, `lengthOfEmployment`, `employer`
 
@@ -247,9 +249,9 @@ Alternatively, scrape a specific subreddit: `https://www.reddit.com/r/subreddit/
 
 **Input:**
 ```json
-{ "searchType": "similarweb", "domains": ["example.com"] }
+{ "searchType": "similarweb", "domains": ["apify.com", "oxylabs.io", "brightdata.com", "zyte.com", "scraperapi.com", "smartproxy.com", "scrapingbee.com", "nimbleway.com", "diffbot.com", "octoparse.com"] }
 ```
-⚠️ `searchType` is required. Returns empty for small/low-traffic sites. Use bare domain without protocol (e.g., `apify.com`, not `https://apify.com`).
+⚠️ `searchType` is required. **Minimum 10 domains required** — actor rejects fewer with "Minimum 10 domains required for analysis." Always batch all competitors into one call. Use bare domain without protocol (e.g., `apify.com`, not `https://apify.com`).
 
 ---
 
@@ -267,7 +269,7 @@ Alternatively, scrape a specific subreddit: `https://www.reddit.com/r/subreddit/
   "extractImages": false
 }
 ```
-`timeframe` values: `1h`, `1d`, `7d`, `1y`, `all`. Multi-keyword via array. Use quotes for exact phrase match (e.g., `"\"Bright Data\""` to find articles mentioning "Bright Data" as a phrase, not "bright" and "data" separately).
+`timeframe` values: `1h`, `1d`, `7d`, `1y`, `all`. Multi-keyword via array. Use quotes for exact phrase match (e.g., `"\"Bright Data\""` to find articles mentioning "Bright Data" as a phrase, not "bright" and "data" separately). ⚠️ Boolean operators (OR, AND) produce unreliable results — use separate keywords array entries instead of boolean syntax.
 
 **Output keys:** `title`, `url`, `source`, `publishedAt` (ISO), `publishedTimestamp` (unix), `image`, `description` (full text when `extractDescriptions: true`), `metadata`
 

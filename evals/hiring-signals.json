@@ -5,7 +5,7 @@
     "maxBudgetUsd": 5.00,
     "maxRetries": 1,
     "initPreset": "mcp_native",
-    "initBashScript": "set -e\nWORKSPACE=$(find /tmp -type d -name 'eval-workspace-*' 2>/dev/null | head -1)\ncd \"$WORKSPACE\"\ngit clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill\ncp _skill/skills/competitive-intel/SKILL.md CLAUDE.md\ncp -r _skill/skills/competitive-intel/references references\nrm -rf _skill",
+    "initBashScript": "set -e\nWORKSPACE=$(find /tmp -type d -name 'eval-workspace-*' 2>/dev/null | head -1)\ncd \"$WORKSPACE\"\ngit clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill\ncp _skill/skills/apify-easy-competitive-intelligence/SKILL.md CLAUDE.md\ncp -r _skill/skills/apify-easy-competitive-intelligence/reference reference\nrm -rf _skill",
     "mcpConfigJson": {
         "mcpServers": {
             "apify": {

@@ -1,5 +1,5 @@
 {
-  "name": "competitive-intel",
-  "version": "0.1.0",
+  "name": "apify-easy-competitive-intelligence",
+  "version": "1.0.0",
   "description": "Real-time competitive intelligence powered by Apify actors"
 }

@@ -13,8 +13,8 @@ cd "$WORKSPACE"
 git clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill
 
 # CLAUDE.md = SKILL.md so the agent picks it up automatically
-cp _skill/skills/competitive-intel/SKILL.md CLAUDE.md
-cp -r _skill/skills/competitive-intel/references references
+cp _skill/skills/apify-easy-competitive-intelligence/SKILL.md CLAUDE.md
+cp -r _skill/skills/apify-easy-competitive-intelligence/reference reference
 
 rm -rf _skill
 
