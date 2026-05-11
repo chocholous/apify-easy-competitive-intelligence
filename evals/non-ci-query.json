@@ -1,0 +1,21 @@
+{
+    "agent": "claude-code",
+    "scenario": "---\nname: non-ci-query\ndescription: \"Corner case: non-competitive query should NOT trigger the skill\"\nabortOnFailure: false\n---\n\n## Test\nWrite a Python function that sorts a list of dictionaries by a given key. Include type hints.\n\n## Checkpoint\n\n### Checks\ncontains: def sort\nregex: (?i)(list|dict)\n\n### Judge\nThe response must be a straightforward Python code answer. It should NOT contain any competitive intelligence workflow, actor calls, SWOT analysis, or market research. If the agent triggered a competitive intelligence skill for this query, it is a FAIL.\n",
+    "maxTurns": 5,
+    "maxBudgetUsd": 0.50,
+    "maxRetries": 0,
+    "initPreset": "mcp_native",
+    "initBashScript": "set -e\nWORKSPACE=$(find /tmp -type d -name 'eval-workspace-*' 2>/dev/null | head -1)\ncd \"$WORKSPACE\"\ngit clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill\ncp _skill/skills/competitive-intel/SKILL.md CLAUDE.md\ncp -r _skill/skills/competitive-intel/references references\nrm -rf _skill",
+    "mcpConfigJson": {
+        "mcpServers": {
+            "apify": {
+                "command": "npx",
+                "args": ["-y", "@apify/mcp-server"],
+                "env": { "APIFY_TOKEN": "${APIFY_TOKEN}" }
+            }
+        }
+    },
+    "envVariables": {
+        "APIFY_TOKEN": "YOUR_APIFY_TOKEN_HERE"
+    }
+}
