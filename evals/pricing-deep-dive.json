@@ -2,7 +2,7 @@
     "agent": "claude-code",
     "scenario": "---\nname: pricing-deep-dive\ndescription: \"E2E: Pricing Deep Dive module with tier comparison\"\nabortOnFailure: false\n---\n\n## Test\nUse the competitive-intel skill. I'm PMM at Apify. I need a detailed pricing breakdown for Apify vs ScrapingBee vs Crawlbase — tiers, per-use-case costs, add-ons. Work autonomously.\n\n## Checkpoint\n\n### Checks\ncontains: ScrapingBee\ncontains: Crawlbase\nregex: \\$\\d+\nregex: https?://\n\n### Script\nINPUT=$(cat)\nLINES=$(echo \"$INPUT\" | wc -l)\nPRICES=$(echo \"$INPUT\" | grep -oE '\\$[0-9,]+' | wc -l)\nif [ \"$LINES\" -lt 20 ]; then\n  echo \"FAIL: pricing report too short ($LINES lines)\"\n  exit 1\nfi\nif [ \"$PRICES\" -lt 3 ]; then\n  echo \"FAIL: not enough pricing data points ($PRICES)\"\n  exit 1\nfi\necho \"PASS: $LINES lines, $PRICES price points\"\n\n### Judge\nEvaluate this pricing comparison report. It must:\n1. Compare pricing of at least Apify, ScrapingBee, and Crawlbase\n2. Include specific dollar amounts, tier names, and feature differences per tier\n3. Be based on live data from pricing pages (not training knowledge) — look for scraped URLs or actor references\n4. Include source URLs and confidence labels\n5. Provide strategic pricing insights useful for a PMM (positioning gaps, value wedges)\nBonus if it uses Nagle-style decomposition or normalized per-unit comparisons.\n",
     "maxTurns": 30,
-    "maxBudgetUsd": 5.00,
+    "maxBudgetUsd": 5.0,
     "maxRetries": 1,
     "initPreset": "mcp_native",
     "initBashScript": "set -e\nWORKSPACE=$(find /tmp -type d -name 'eval-workspace-*' 2>/dev/null | head -1)\ncd \"$WORKSPACE\"\ngit clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill\ncp _skill/skills/apify-easy-competitive-intelligence/SKILL.md CLAUDE.md\ncp -r _skill/skills/apify-easy-competitive-intelligence/reference reference\nrm -rf _skill",
@@ -10,12 +10,18 @@
         "mcpServers": {
             "apify": {
                 "command": "npx",
-                "args": ["-y", "@apify/mcp-server"],
-                "env": { "APIFY_TOKEN": "${APIFY_TOKEN}" }
+                "args": [
+                    "-y",
+                    "@apify/mcp-server"
+                ],
+                "env": {
+                    "APIFY_TOKEN": "${APIFY_TOKEN}"
+                }
             }
         }
     },
     "envVariables": {
-        "APIFY_TOKEN": "YOUR_APIFY_TOKEN_HERE"
+        "APIFY_TOKEN": "${APIFY_TOKEN}",
+        "CLAUDE_CODE_OAUTH_TOKEN": "${CLAUDE_CODE_OAUTH_TOKEN}"
     }
 }

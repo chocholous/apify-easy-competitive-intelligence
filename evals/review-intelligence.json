@@ -2,7 +2,7 @@
     "agent": "claude-code",
     "scenario": "---\nname: review-intelligence\ndescription: \"E2E: Review Intelligence module — customer reviews and sentiment\"\nabortOnFailure: false\n---\n\n## Test\nUse the competitive-intel skill. I'm PMM at Apify. What do customers say about Bright Data on review sites? I need sentiment analysis, common complaints, and what makes people switch. Work autonomously.\n\n## Checkpoint\n\n### Checks\ncontains: Bright Data\nregex: https?://\nregex: \\[(?:High|Medium|Low)\\s*[\\|│]\\s*[^\\]]+\\]\nregex: (?i)(g2|capterra|reddit|glassdoor|trustpilot)\n\n### Script\nINPUT=$(cat)\nLINES=$(echo \"$INPUT\" | wc -l)\nURLS=$(echo \"$INPUT\" | grep -oE 'https?://[^ )]+' | wc -l)\nif [ \"$LINES\" -lt 15 ]; then\n  echo \"FAIL: report too short ($LINES lines)\"\n  exit 1\nfi\nif [ \"$URLS\" -lt 2 ]; then\n  echo \"FAIL: not enough source URLs ($URLS)\"\n  exit 1\nfi\necho \"PASS: $LINES lines, $URLS URLs\"\n\n### Judge\nEvaluate this customer review intelligence report about Bright Data. It must:\n1. Include real review data gathered via Apify actors (G2, Capterra, Reddit, or similar) — not just training knowledge\n2. Provide sentiment analysis with specific data points (ratings, review counts, quotes)\n3. Identify switching signals or common pain points\n4. Include source URLs and confidence labels\n5. Frame findings for a PMM audience with actionable takeaways\n",
     "maxTurns": 30,
-    "maxBudgetUsd": 5.00,
+    "maxBudgetUsd": 5.0,
     "maxRetries": 1,
     "initPreset": "mcp_native",
     "initBashScript": "set -e\nWORKSPACE=$(find /tmp -type d -name 'eval-workspace-*' 2>/dev/null | head -1)\ncd \"$WORKSPACE\"\ngit clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill\ncp _skill/skills/apify-easy-competitive-intelligence/SKILL.md CLAUDE.md\ncp -r _skill/skills/apify-easy-competitive-intelligence/reference reference\nrm -rf _skill",
@@ -10,12 +10,18 @@
         "mcpServers": {
             "apify": {
                 "command": "npx",
-                "args": ["-y", "@apify/mcp-server"],
-                "env": { "APIFY_TOKEN": "${APIFY_TOKEN}" }
+                "args": [
+                    "-y",
+                    "@apify/mcp-server"
+                ],
+                "env": {
+                    "APIFY_TOKEN": "${APIFY_TOKEN}"
+                }
             }
         }
     },
     "envVariables": {
-        "APIFY_TOKEN": "YOUR_APIFY_TOKEN_HERE"
+        "APIFY_TOKEN": "${APIFY_TOKEN}",
+        "CLAUDE_CODE_OAUTH_TOKEN": "${CLAUDE_CODE_OAUTH_TOKEN}"
     }
 }
