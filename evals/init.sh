@@ -1,5 +1,5 @@
 #!/bin/bash
-# Inject competitive-intel skill into agent workspace as CLAUDE.md + references
+# Inject competitive-intel plugin into agent workspace
 set -e
 
 WORKSPACE=$(find /tmp -type d -name "eval-workspace-*" 2>/dev/null | head -1)
@@ -12,11 +12,11 @@ cd "$WORKSPACE"
 
 git clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill
 
-# CLAUDE.md = SKILL.md so the agent picks it up automatically
-cp _skill/skills/apify-easy-competitive-intelligence/SKILL.md CLAUDE.md
-cp -r _skill/skills/apify-easy-competitive-intelligence/reference reference
+# Copy entire plugin structure so Claude Code auto-detects it
+cp -r _skill/.claude-plugin .claude-plugin
+cp -r _skill/skills skills
 
 rm -rf _skill
 
-echo "Skill injected: CLAUDE.md + references/"
-ls -la CLAUDE.md references/
+echo "Plugin injected:"
+find .claude-plugin skills -type f
