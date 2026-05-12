@@ -43,4 +43,5 @@ text = re.sub(r'\\\$\{(\w+)\}', replace_env, text)
 sys.stdout.write(text)
 ")
 
-echo "$RESOLVED" | apify call pavel242242/agent-evals-runner -f -
+MEMORY="${EVAL_MEMORY:-2048}"
+echo "$RESOLVED" | apify call pavel242242/agent-evals-runner -f - -m "$MEMORY"
