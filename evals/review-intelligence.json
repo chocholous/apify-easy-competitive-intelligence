@@ -10,5 +10,6 @@
         "APIFY_TOKEN": "${APIFY_TOKEN}",
         "CLAUDE_CODE_OAUTH_TOKEN": "${CLAUDE_CODE_OAUTH_TOKEN}",
         "CLAUDE_CODE": "0"
-    }
+    },
+    "judgeModel": "claude-opus-4-6"
 }
