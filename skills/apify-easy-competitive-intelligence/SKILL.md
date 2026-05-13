@@ -111,7 +111,7 @@ Clarify before gathering data:
 - **Cost budget** — 3-8 actor calls per snapshot. Track total, warn at 15+.
 - **Parallelize** independent `call-actor` calls in a single response.
 - **Failures** — Report every failure explicitly (actor, input, error). Retry with corrected input if the cause is obvious. If retry fails, try `rag-web-browser` as fallback. Never silently skip a failed data source.
-- **Cite everything** — Include source URLs for every data point.
+- **Cite everything** — Include full source URLs (with `https://` prefix) for every data point. Write `https://oxylabs.io/pricing`, not just `oxylabs.io/pricing`.
 - **Async for long runs** — Set `async: true` for actors >30s, poll with `get-actor-run`.
 - **Protected platforms** — Do NOT use `website-content-crawler` or `rag-web-browser` for: g2.com, capterra.com, gartner.com, glassdoor.com, reddit.com, linkedin.com. Use dedicated actors.
 

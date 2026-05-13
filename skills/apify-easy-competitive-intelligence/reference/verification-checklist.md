@@ -4,7 +4,7 @@ Run this audit on every claim before presenting the final report.
 
 ## Audit Steps
 
-1. **Source audit** — Every factual statement has a source URL? If not, find it in scraped data or remove the claim.
+1. **Source audit** — Every factual statement has a full source URL (with `https://` prefix)? If not, find it in scraped data or remove the claim.
 2. **Data-back check** — Every insight traces to specific data points. "Weak SEO" must be backed by "absent from top 10 for [keyword] — [URL]". Insight without data = opinion — trace back or remove.
 3. **Contradiction scan** — Claims across modules contradict? (e.g., snapshot says "strong support" but G2 shows complaints). Flag and explain, don't hide.
 
