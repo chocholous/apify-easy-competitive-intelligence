@@ -35,10 +35,10 @@ If CLI is unavailable and Apify MCP server is connected, use MCP `call-actor` / 
 
 ## Authentication
 
-If a CLI command fails with an auth error, authenticate using one of these methods:
+Before making actor calls, verify auth: `apify info` — should show username and userId. If not authenticated:
 
-1. **OAuth (interactive):** `apify login` (opens browser)
-2. **Environment variable:** `export APIFY_TOKEN=your_token_here`
+1. **Environment variable:** `export APIFY_TOKEN=your_token_here`
+2. **Login with token:** `apify login --token $APIFY_TOKEN`
 3. **From .env file:** `source .env` (if the file contains `APIFY_TOKEN=...`)
 
 Generate token: https://console.apify.com/settings/integrations
