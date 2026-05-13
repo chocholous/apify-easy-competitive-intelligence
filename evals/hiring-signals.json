@@ -4,7 +4,7 @@
     "maxBudgetUsd": 5.0,
     "maxRetries": 1,
     "initPreset": "cli_native",
-    "initBashScript": "set -e\nWORKSPACE=$(find /tmp -type d -name 'eval-workspace-*' 2>/dev/null | head -1)\ncd \"$WORKSPACE\"\ngit clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill\ncp -r _skill/.claude-plugin .claude-plugin\ncp -r _skill/skills skills\nrm -rf _skill\necho \"Plugin injected\"",
+    "initBashScript": "set -e\nWORKSPACE=$(find /tmp -type d -name 'eval-workspace-*' 2>/dev/null | head -1)\ncd \"$WORKSPACE\"\ngit clone --depth 1 https://github.com/chocholous/apify-easy-competitive-intelligence.git _skill\ncp -r _skill/.claude-plugin .claude-plugin\ncp -r _skill/skills skills\nrm -rf _skill\napify login --token \"$APIFY_TOKEN\" 2>/dev/null || true\necho \"Plugin injected, apify authenticated\"",
     "envVariables": {
         "APIFY_TOKEN": "${APIFY_TOKEN}",
         "CLAUDE_CODE_OAUTH_TOKEN": "${CLAUDE_CODE_OAUTH_TOKEN}",
