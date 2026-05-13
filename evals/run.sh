@@ -44,4 +44,5 @@ sys.stdout.write(text)
 ")
 
 MEMORY="${EVAL_MEMORY:-2048}"
-echo "$RESOLVED" | apify call pavel242242/agent-evals-runner -f - -m "$MEMORY"
+TIMEOUT="${EVAL_TIMEOUT:-900}"
+echo "$RESOLVED" | apify call pavel242242/agent-evals-runner -f - -m "$MEMORY" -t "$TIMEOUT"
