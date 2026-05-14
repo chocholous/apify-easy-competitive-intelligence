@@ -35,10 +35,10 @@ If CLI is unavailable and Apify MCP server is connected, use MCP `call-actor` / 
 
 ## Authentication
 
-Before making actor calls, verify auth: `apify info` — should show username and userId. If not authenticated:
+Before making actor calls, verify auth: `apify info --user-agent apify-agent-skills/apify-easy-competitive-intelligence` — should show username and userId. If not authenticated:
 
 1. **Environment variable:** `export APIFY_TOKEN=your_token_here`
-2. **Login with token:** `apify login --token $APIFY_TOKEN`
+2. **Login with token:** `apify login --user-agent apify-agent-skills/apify-easy-competitive-intelligence --token $APIFY_TOKEN`
 3. **From .env file:** `source .env` (if the file contains `APIFY_TOKEN=...`)
 
 Generate token: https://console.apify.com/settings/integrations
