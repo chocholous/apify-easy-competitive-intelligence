@@ -14,7 +14,7 @@ description: >
 
 # Competitive Intelligence
 
-Real-time competitive intelligence powered by live web data via Apify actors. **Never answer competitive questions from training knowledge alone.** Always gather live data first, then analyze.
+Real-time competitive intelligence powered by live web data via Apify actors. **Never answer competitive questions from training knowledge.** Always gather live data first, then analyze.
 
 ## Prerequisites
 
@@ -81,17 +81,17 @@ Alternatively, fetch the live schema: `apify actors info "ACTOR_ID" --user-agent
 
 Clarify before gathering data:
 - **Role** — Analyzed company, competitor, investor, consultant?
-- **Decision** — Entering market, defending position, choosing vendor, building battlecard?
-- **Autonomy** — Checkpoints after initial findings, or autopilot?
+- **Decision** — Entering market, defending position, comparing pricing, validating campaign, building battlecard?
+- **Autonomy level** — Checkpoints after initial findings, or autopilot?
 
 ### Steps 1–7
 
 1. **Clarify scope** — Identify competitors. Select module(s). Default geography: US.
 2. **Read module reference** — Load `reference/modules/<module>.md` for gathering + analysis instructions.
-3. **Gather live data** — For each actor call, follow the three-step pattern: **Read** (actor-schemas.md) → **Discover** (SERP for URLs) → **Run** (call actor). Use PRIMARILY actors from the Actor Registry above.
+3. **Gather live data** — For each actor call, follow the three-step pattern: **Read** (actor-schemas.md) → **Discover** (SERP for URLs/Slug/input IDs) → **Run** (call actor). Use PRIMARILY actors from the module with fallback to Actor Registry above.
 4. **Checkpoint** (if not autopilot) — Present first findings, confirm direction.
 5. **Analyze** — Select framework, lead with narrative, support with tables.
-6. **Verify** — Run pre-delivery verification (`reference/verification-checklist.md`). Check: every claim has a source URL, every major finding has a confidence label, inferences are labeled as such. Remove any ungrounded claims.
+6. **Verify** — Run pre-delivery verification (`reference/verification-checklist.md`). Check: every claim has a source URL, every finding has a confidence label, inferences are labeled as such. Label any ungrounded claims.
 7. **Deliver** — End with strategic recommendations framed for the user's role.
 
 ### Framework Selection
@@ -108,25 +108,23 @@ Clarify before gathering data:
 ## Data Collection Rules
 
 - **Prefer structured actors** over `website-content-crawler` when a dedicated actor exists.
-- **Cost budget** — 3-8 actor calls per snapshot. Track total, warn at 15+.
-- **Parallelize** independent `call-actor` calls in a single response.
-- **Failures** — Report every failure explicitly (actor, input, error). Retry with corrected input if the cause is obvious. If retry fails, try `rag-web-browser` as fallback. Never silently skip a failed data source.
+- **Failures** — Report every failure explicitly (actor, input, error). Retry with corrected input if the cause is obvious. If retry fails, report. Never silently skip a failed data source.
 - **Cite everything** — Include full source URLs (with `https://` prefix) for every data point. Write `https://oxylabs.io/pricing`, not just `oxylabs.io/pricing`.
-- **Async for long runs** — Set `async: true` for actors >30s, poll with `get-actor-run`.
-- **Protected platforms** — Do NOT use `website-content-crawler` or `rag-web-browser` for: g2.com, capterra.com, gartner.com, glassdoor.com, reddit.com, linkedin.com. Use dedicated actors.
+- **Protected platforms** —  for: g2.com, capterra.com, gartner.com, glassdoor.com, reddit.com, linkedin.com. Use dedicated actors.
 
 ### Apify vs. WebSearch
 
-**Apify required**: review sites (G2, Capterra, Gartner, Glassdoor), LinkedIn, Reddit, Amazon, Walmart, app stores, SimilarWeb, Crunchbase, Wayback Machine, Google Maps reviews, news (Google News actor).
+**Apify actor required**: Do NOT use `website-content-crawler` or `rag-web-browser`: review sites (G2, Capterra, Gartner, Glassdoor), LinkedIn, Reddit, Amazon, Walmart, app stores, SimilarWeb, Crunchbase, Wayback Machine, Google Maps reviews, news (Google News actor).
 
-**WebSearch/WebFetch sufficient** (Claude Code built-in tools): competitor discovery, general company info, blog posts, publicly accessible pricing pages.
+**WebSearch/WebFetch/`rag-web-browser`/`website-content-crawler` sufficient** (Apify agent friandly actors & Claude Code built-in tools): competitor discovery, general company info, blog posts, publicly accessible pricing pages.
 
 ## Data Validation & Grounding
+Primary source = vendor website, official profiles, regulatory filings, direct quotes.
+2+ third-party sources = everything else.
 
 - **Every factual claim needs a source URL.** No link = not a fact.
-- **Confidence labels are mandatory.** Mark every major finding: **High** (primary source), **Medium** (2+ third-party sources), **Low** (single third-party source). Format: `[Confidence | Source]`. No report without labels.
+- **Confidence labels are mandatory.** Mark all findings: **High** (primary source), **Medium** (2+ third-party sources), **Low** (single third-party source). Format: `[Confidence | Source]`. No report without labels.
 - **Data tiers**: Verified (primary source) → Reported (third-party, attribute) → Inferred (label as "this suggests...") → Ungrounded (omit).
-- **Numbers are dangerous** — employee counts, revenue, funding change fast. Always cite source and date.
 - **Empty results ARE intelligence** — 0 jobs = not hiring, 0 SimilarWeb = small site, 12 reviews = low adoption.
 - **Cross-reference** — Single-source claims are unverified. Multi-source (G2 + Capterra + Reddit) = pattern.
 
