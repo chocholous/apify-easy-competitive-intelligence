@@ -108,6 +108,7 @@ Clarify before gathering data:
 ## Data Collection Rules
 
 - **Prefer structured actors** over `website-content-crawler` when a dedicated actor exists.
+- **Default recency: last month.** Unless the user specifies otherwise, use date filters to get data from the last ~30 days. Use the actor's native date parameter when available (see actor-schemas.md for each actor's date fields). For actors without date filters, sort by newest and filter timestamps in post-processing.
 - **Failures** — Report every failure explicitly (actor, input, error). Retry with corrected input if the cause is obvious. If retry fails, report. Never silently skip a failed data source.
 - **Cite everything** — Include full source URLs (with `https://` prefix) for every data point. Write `https://oxylabs.io/pricing`, not just `oxylabs.io/pricing`.
 - **Protected platforms** —  for: g2.com, capterra.com, gartner.com, glassdoor.com, reddit.com, linkedin.com. Use dedicated actors.

@@ -125,6 +125,7 @@ Each `organicResult`: `title`, `url`, `description`, `position`, `date`, `emphas
 { "products": ["https://www.amazon.com/dp/ASIN"] }
 ```
 ⚠️ Field is `products`, NOT `productUrls`. Use the same `amazon.com/dp/ASIN` format as Amazon-crawler.
+Optional: `sort` ("recent" | "helpful"), `start_date` / `end_date` (YYYY-MM-DD) for date range, `limit` (pages, max 10 = 100 reviews).
 
 May return 0 items for some products — try the full product URL with title slug if the short form fails.
 
@@ -147,10 +148,11 @@ May return 0 items for some products — try the full product URL with title slu
 
 **Input:**
 ```json
-{ "startUrls": [{"url": "https://www.google.com/maps/place/Place+Name/@lat,lng,17z"}], "maxReviews": 30 }
+{ "startUrls": [{"url": "https://www.google.com/maps/place/Place+Name/@lat,lng,17z"}], "maxReviews": 30, "reviewsSort": "newest" }
 ```
 
 **How to find the URL:** Search Google Maps for the business → copy full URL from browser address bar. Must include the `@lat,lng,zoom` part. Alternatively use a place ID URL: `https://www.google.com/maps/place/?q=place_id:ChIJ...`.
+Optional: `reviewsSort` ("newest" | "mostRelevant" | "highestRating" | "lowestRating"), `reviewsStartDate` ("1 month" or "2024-05-01").
 
 **Output:** Status object with `isFinished`, `enqueued`, `placeIdsEnqueued`. Review data in separate dataset items.
 
@@ -219,8 +221,9 @@ call-actor: apify/google-search-scraper
 
 **Input:**
 ```json
-{ "startUrls": [{"url": "https://www.reddit.com/search/?q=company+keyword"}], "maxItems": 10 }
+{ "startUrls": [{"url": "https://www.reddit.com/search/?q=company+keyword"}], "maxItems": 10, "searchSort": "new", "searchTime": "month" }
 ```
+Optional: `searchSort` ("relevance" | "hot" | "top" | "new" | "comments"), `searchTime` ("hour" | "day" | "week" | "month" | "year" | "all"). These only apply to keyword search, not direct URLs.
 
 Alternatively, scrape a specific subreddit: `https://www.reddit.com/r/subreddit/search/?q=keyword`.
 
@@ -232,9 +235,10 @@ Alternatively, scrape a specific subreddit: `https://www.reddit.com/r/subreddit/
 
 **Input:**
 ```json
-{ "appIdOrUrl": "com.company.app" }
+{ "appIdOrUrl": "com.company.app", "sortBy": "newest", "recentDays": 30 }
 ```
 ⚠️ Field is `appIdOrUrl`, NOT `appId`.
+Optional: `sortBy` ("newest" | "mostRelevant" | "highestRating" | "lowestRating"), `recentDays` (number, 0 = no limit), `endDate` (YYYY-MM-DD), `maxReviews` (number).
 
 **How to find the app ID:** Open the app on Google Play → the URL is `play.google.com/store/apps/details?id=com.company.app`. The `id` parameter is the app ID (e.g., `com.slack`, `com.spotify.music`). Both the ID string and the full Play Store URL work as input.
 
@@ -245,6 +249,7 @@ Alternatively, scrape a specific subreddit: `https://www.reddit.com/r/subreddit/
 ⚠️ Requires SHADER proxy group which may not be available on all Apify plans. Verify access before use.
 
 **Input (when proxy available):** App Store URL, e.g., `https://apps.apple.com/us/app/app-name/idNUMBER`.
+Optional: `timePeriod` ("mostRecent" | "lastDay" | "lastWeek" | "lastMonth" | "last6Months" | "lastYear" | "allTime"), `maxReviews` (number).
 
 **How to find the URL:** Search App Store or use SERP: `"[app] site:apps.apple.com"`. The numeric ID at the end (`id618783545`) identifies the app.
 
@@ -267,14 +272,14 @@ Alternatively, scrape a specific subreddit: `https://www.reddit.com/r/subreddit/
 {
   "keywords": ["\"Company Name\""],
   "maxArticles": 10,
-  "timeframe": "7d",
+  "timeframe": "1m",
   "region_language": "US:en",
   "decodeUrls": true,
   "extractDescriptions": true,
   "extractImages": false
 }
 ```
-`timeframe` values: `1h`, `1d`, `7d`, `1y`, `all`. Multi-keyword via array. Use quotes for exact phrase match (e.g., `"\"Bright Data\""` to find articles mentioning "Bright Data" as a phrase, not "bright" and "data" separately). ⚠️ Boolean operators (OR, AND) produce unreliable results — use separate keywords array entries instead of boolean syntax.
+`timeframe` values: `1h`, `1d`, `1w`, `1m`, `1y`. Multi-keyword via array. Use quotes for exact phrase match (e.g., `"\"Bright Data\""` to find articles mentioning "Bright Data" as a phrase, not "bright" and "data" separately). ⚠️ Boolean operators (OR, AND) produce unreliable results — use separate keywords array entries instead of boolean syntax.
 
 **Output keys:** `title`, `url`, `source`, `publishedAt` (ISO), `publishedTimestamp` (unix), `image`, `description` (full text when `extractDescriptions: true`), `metadata`
 
