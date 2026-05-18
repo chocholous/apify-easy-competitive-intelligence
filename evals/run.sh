@@ -45,4 +45,8 @@ sys.stdout.write(text)
 
 MEMORY="${EVAL_MEMORY:-2048}"
 TIMEOUT="${EVAL_TIMEOUT:-900}"
+# Hiring-signals needs more time — judge does extensive grounding on 29+ roles
+case "$1" in
+    hiring-signals*) TIMEOUT="${EVAL_TIMEOUT:-1200}" ;;
+esac
 echo "$RESOLVED" | apify call pavel242242/agent-evals-runner -f - -m "$MEMORY" -t "$TIMEOUT"
