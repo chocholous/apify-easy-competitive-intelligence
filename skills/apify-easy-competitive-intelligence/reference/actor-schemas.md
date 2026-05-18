@@ -227,7 +227,7 @@ Optional: `reviewsStartDate` (date filter), `maxItems` (limit).
 ```json
 { "startUrls": [{"url": "https://www.reddit.com/search/?q=company+keyword"}], "maxItems": 10, "searchSort": "new", "searchTime": "month" }
 ```
-Optional: `searchSort` ("relevance" | "hot" | "top" | "new" | "comments"), `searchTime` ("hour" | "day" | "week" | "month" | "year" | "all"). These only apply to keyword search, not direct URLs.
+`searchSort` values (verified): `"relevance"`, `"hot"`, `"top"`, `"new"`, `"comments"`. `searchTime` values (verified): `"all"`, `"hour"`, `"day"`, `"week"`, `"month"`, `"year"`. These only apply to keyword search, not direct URLs.
 
 Alternatively, scrape a specific subreddit: `https://www.reddit.com/r/subreddit/search/?q=keyword`.
 
@@ -242,7 +242,7 @@ Alternatively, scrape a specific subreddit: `https://www.reddit.com/r/subreddit/
 { "appIdOrUrl": "com.company.app", "sortBy": "newest", "recentDays": 30 }
 ```
 ⚠️ Field is `appIdOrUrl`, NOT `appId`.
-Optional: `sortBy` ("newest" | "mostRelevant" | "highestRating" | "lowestRating"), `recentDays` (number, 0 = no limit), `endDate` (YYYY-MM-DD), `maxReviews` (number).
+`sortBy` values (verified): `"newest"`, `"mostRelevant"`, `"rating"`. `recentDays` (verified): number, 0 = no limit. Optional: `endDate` (YYYY-MM-DD), `maxReviews` (number).
 
 **How to find the app ID:** Open the app on Google Play → the URL is `play.google.com/store/apps/details?id=com.company.app`. The `id` parameter is the app ID (e.g., `com.slack`, `com.spotify.music`). Both the ID string and the full Play Store URL work as input.
 
@@ -265,6 +265,7 @@ Optional: `timePeriod` ("mostRecent" | "lastDay" | "lastWeek" | "lastMonth" | "l
 ```json
 { "searchType": "similarweb", "domains": ["apify.com", "oxylabs.io", "brightdata.com", "zyte.com", "scraperapi.com", "smartproxy.com", "scrapingbee.com", "nimbleway.com", "diffbot.com", "octoparse.com"] }
 ```
+`searchType` values (verified): `"similarweb"`, `"similar_sites"`, `"aitdk"`.
 ⚠️ `searchType` is required. **Minimum 10 domains required** — actor rejects fewer with "Minimum 10 domains required for analysis." Always batch all competitors into one call. Use bare domain without protocol (e.g., `apify.com`, not `https://apify.com`).
 
 ---
