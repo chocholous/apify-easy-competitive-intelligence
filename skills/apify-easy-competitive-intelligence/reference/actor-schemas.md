@@ -169,6 +169,7 @@ Replaces `zhorex/g2-reviews-scraper` (broken).
 { "mode": "product_reviews", "productUrls": ["VERIFIED-SLUG"], "maxReviews": 25, "sortReviews": "newest" }
 ```
 ⚠️ Field is `productUrls` (array of slugs), NOT `startUrls`. `mode` is required.
+`sortReviews` values (verified): `"newest"`, `"helpful"`, `"rating_high"`, `"rating_low"`.
 
 **Output keys:** `reviewId`, `title`, `starRating`, `nps`, `reviewText`, `publishedAt`, `submittedAt`, `reviewerName`, `country`, `region`, `easeOfUse`, `easeOfSetup`, `easeOfAdmin`, `qualityOfSupport`, `meetsRequirements`, `loveTheme`, `hateTheme`, `switchedFromOtherProduct`, `switchedReason`, `companySegment`, `industry`, `productName`, `productSlug`, `url`, `helpfulVotes`, `sourceType`
 
@@ -180,9 +181,10 @@ Replaces `zhorex/g2-reviews-scraper` (broken).
 
 **Input:**
 ```json
-{ "productUrl": "https://www.capterra.com/p/NUMERIC-ID/Product-Name/reviews/", "maxReviews": 10 }
+{ "productUrl": "https://www.capterra.com/p/NUMERIC-ID/Product-Name/reviews/", "maxResults": 10, "sort": "MOST_RECENT" }
 ```
-⚠️ Field is `productUrl` (singular string), NOT `startUrls`.
+⚠️ Field is `productUrl` (singular string), NOT `startUrls`. Limit field is `maxResults`, NOT `maxReviews`.
+`sort` values (verified): `"MOST_RECENT"`, `"HIGHEST_RATED"`, `"LOWEST_RATED"`, `"HIGHEST_COMPLETENESS_SCORE"`.
 
 **Output keys:** `url`, `reviewId`, `title`, `writtenOn`, `overallRating`, `easeOfUseRating`, `customerSupportRating`, `functionalityRating`, `valueForMoneyRating`, `recommendationRating`, `prosText`, `consText`, `generalComments`, `adviceToOthers`, `incentivized`, `reviewer`, `vendorResponse`, `scrapedAt`
 
@@ -206,9 +208,11 @@ call-actor: apify/google-search-scraper
 
 **Input:**
 ```json
-{ "startUrls": [{"url": "https://www.glassdoor.com/Overview/Working-at-COMPANY-EI_IEVERIFIED-ID.htm"}], "command": "reviews" }
+{ "startUrls": [{"url": "https://www.glassdoor.com/Overview/Working-at-COMPANY-EI_IEVERIFIED-ID.htm"}], "command": "reviews", "sortReviewsBy": "DATE" }
 ```
 `command` values: `reviews`, `jobs`, `interviews`, `salaries`, `overview`. Default to `reviews` for CI.
+`sortReviewsBy` values (verified): `"RELEVANCE"`, `"DATE"`, `"RATING"`, `"RATING_ASC"`.
+Optional: `reviewsStartDate` (date filter), `maxItems` (limit).
 
 **Output keys:** `reviewId`, `summary`, `pros`, `cons`, `advice`, `ratingOverall`, `ratingWorkLifeBalance`, `ratingCultureAndValues`, `ratingCompensationAndBenefits`, `ratingCareerOpportunities`, `ratingSeniorLeadership`, `ratingDiversityAndInclusion`, `ratingCeo`, `ratingBusinessOutlook`, `ratingRecommendToFriend`, `jobTitle`, `location`, `reviewDateTime`, `isCurrentJob`, `lengthOfEmployment`, `employer`
 
@@ -279,7 +283,7 @@ Optional: `timePeriod` ("mostRecent" | "lastDay" | "lastWeek" | "lastMonth" | "l
   "extractImages": false
 }
 ```
-`timeframe` values: `1h`, `1d`, `7d`, `1y`, `all`. Multi-keyword via array. ⚠️ No `1m` or `1w` — gap between 7 days and 1 year. For ~1 month of news, use `apify/google-search-scraper` with `quickDateRange: "m1"` instead. Use quotes for exact phrase match (e.g., `"\"Bright Data\""` to find articles mentioning "Bright Data" as a phrase, not "bright" and "data" separately). ⚠️ Boolean operators (OR, AND) produce unreliable results — use separate keywords array entries instead of boolean syntax.
+`timeframe` values (runtime-verified): `1h`, `1d`, `7d`, `1y`. ⚠️ Schema claims `1w`/`1m` exist but runtime rejects them. Gap: 7 days → 1 year. For ~1 month of news, use `apify/google-search-scraper` with `quickDateRange: "m1"` instead. Use quotes for exact phrase match (e.g., `"\"Bright Data\""` to find articles mentioning "Bright Data" as a phrase, not "bright" and "data" separately). ⚠️ Boolean operators (OR, AND) produce unreliable results — use separate keywords array entries instead of boolean syntax.
 
 **Output keys:** `title`, `url`, `source`, `publishedAt` (ISO), `publishedTimestamp` (unix), `image`, `description` (full text when `extractDescriptions: true`), `metadata`
 
