@@ -20,7 +20,7 @@ call-actor: memo23/glassdoor-scraper-ppr
 
 # 4: Recent hiring news + external job boards
 call-actor: apify/google-search-scraper
-  input: { "queries": "[competitor] hiring jobs careers [current-year]\n[competitor] layoffs OR expansion [previous-year] [current-year]\nsite:indeed.com [competitor] jobs" }
+  input: { "queries": "[competitor] hiring jobs careers\n[competitor] layoffs OR expansion\nsite:indeed.com [competitor] jobs", "quickDateRange": "m6" }
 ```
 
 **0 LinkedIn results = signal** (not hiring aggressively). Glassdoor compensates — reviews reveal culture/strategy even without active hiring.

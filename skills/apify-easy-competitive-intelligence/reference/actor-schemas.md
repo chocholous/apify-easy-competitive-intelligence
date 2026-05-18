@@ -11,6 +11,11 @@ Verified inputs and output fields from real test runs. Last tested: 2026-05-06.
 { "queries": "\"Company Name\" keyword", "maxPagesPerQuery": 1 }
 ```
 Optional: `countryCode` ("us"), `languageCode` ("en"), `maxPagesPerQuery` (1-10).
+**Date filters** (use instead of putting years in query text):
+- `quickDateRange`: `"w2"` (2 weeks), `"m6"` (6 months), `"y1"` (1 year). Shorthand `d`/`h`/`w`/`m`/`y` + number.
+- `afterDate`: `"2024-01-01"` or relative `"3 months"`. UTC.
+- `beforeDate`: `"2024-12-31"` or relative `"8 days"`. UTC.
+Prefer `quickDateRange` for recency filtering (e.g., `"m3"` for last 3 months). Don't combine with `afterDate`/`beforeDate`.
 
 **Output keys:** `searchQuery`, `url`, `organicResults[]`, `paidResults[]`, `peopleAlsoAsk[]`, `relatedQueries[]`, `aiOverview`, `resultsTotal`
 
