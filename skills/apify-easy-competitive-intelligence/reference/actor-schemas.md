@@ -272,14 +272,14 @@ Optional: `timePeriod` ("mostRecent" | "lastDay" | "lastWeek" | "lastMonth" | "l
 {
   "keywords": ["\"Company Name\""],
   "maxArticles": 10,
-  "timeframe": "1m",
+  "timeframe": "7d",
   "region_language": "US:en",
   "decodeUrls": true,
   "extractDescriptions": true,
   "extractImages": false
 }
 ```
-`timeframe` values: `1h`, `1d`, `1w`, `1m`, `1y`. Multi-keyword via array. Use quotes for exact phrase match (e.g., `"\"Bright Data\""` to find articles mentioning "Bright Data" as a phrase, not "bright" and "data" separately). ⚠️ Boolean operators (OR, AND) produce unreliable results — use separate keywords array entries instead of boolean syntax.
+`timeframe` values: `1h`, `1d`, `7d`, `1y`, `all`. Multi-keyword via array. ⚠️ No `1m` or `1w` — gap between 7 days and 1 year. For ~1 month of news, use `apify/google-search-scraper` with `quickDateRange: "m1"` instead. Use quotes for exact phrase match (e.g., `"\"Bright Data\""` to find articles mentioning "Bright Data" as a phrase, not "bright" and "data" separately). ⚠️ Boolean operators (OR, AND) produce unreliable results — use separate keywords array entries instead of boolean syntax.
 
 **Output keys:** `title`, `url`, `source`, `publishedAt` (ISO), `publishedTimestamp` (unix), `image`, `description` (full text when `extractDescriptions: true`), `metadata`
 
